@@ -27,13 +27,3 @@ items:
         - type: ImageChange
           imageChange: {}
         - type: ConfigChange
-
-  - kind: ImageStream
-    apiVersion: image.openshift.io/v1
-    metadata:
-      name: base-notebook
-      namespace: openshift
-      labels:
-        app.openshift.io/runtime: python
-      annotations:
-        description: base jupyter notebook image
