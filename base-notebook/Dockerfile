@@ -28,3 +28,6 @@ RUN chmod +x /opt/app-root/bin/start.sh && \
 ENV APP_SCRIPT=/opt/app-root/bin/start.sh
 
 USER 1001
+
+# Set the default CMD to run the notebook
+CMD $APP_SCRIPT
