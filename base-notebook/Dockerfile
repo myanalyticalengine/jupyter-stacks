@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/python-39:1-48
+FROM registry.access.redhat.com/ubi8/python-39:1-51
 
 ENV APP_SCRIPT=/opt/app-root/bin/start.sh \
     DATA_ROOT=/opt/app-root/data \
