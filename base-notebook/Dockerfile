@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi8/python-39:1-51
 
 ENV APP_SCRIPT=/opt/app-root/bin/start.sh \
     DATA_ROOT=/opt/app-root/data \
-    NOTEBOOK_ROOT=/opt/app-root/data/src \
+    NOTEBOOK_ROOT=/opt/app-root/src \
     JUPYTER_LAB_VERSION=3.4.0 \
     JUPYTER_CMD=notebook \
     JUPYTER_PORT=8080 \
@@ -25,8 +25,8 @@ RUN mkdir -p ${JUPYTER_CONFIG_DIR} && \
     fix-permissions ${JUPYTER_CONFIG_DIR} -P
 
 # install JupyterLab and everything else
-COPY requirements.txt ${APP_ROOT}/src/requirements.txt
-RUN pip install -r ${APP_ROOT}/src/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
 RUN jupyter ${JUPYTER_CMD} --generate-config && \
     npm cache clean --force && \
