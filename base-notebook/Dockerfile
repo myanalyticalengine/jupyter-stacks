@@ -13,10 +13,13 @@ USER root
 RUN mkdir -p ${DATA_ROOT}
 RUN chown -R 1001:0 ${DATA_ROOT} && \
     fix-permissions ${DATA_ROOT} -P
+RUN mkdir -p ${JUPYTER_CONFIG_DIR}
+RUN chown -R 1001:0 ${JUPYTER_CONFIG_DIR} && \
+    fix-permissions ${JUPYTER_CONFIG_DIR} -P
 
 RUN pip install jupyterlab==${JUPYTER_LAB_VERSION}
 
-RUN jupyter notebook --generate-config && \
+RUN jupyter ${JUPYTER_CMD} --generate-config && \
     npm cache clean --force && \
     jupyter lab clean
 
