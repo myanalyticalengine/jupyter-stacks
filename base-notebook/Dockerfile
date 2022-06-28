@@ -25,7 +25,8 @@ RUN mkdir -p ${JUPYTER_CONFIG_DIR} && \
     fix-permissions ${JUPYTER_CONFIG_DIR} -P
 
 # install JupyterLab and everything else
-RUN pip install -r requirements.txt
+COPY requirements.txt ${APP_ROOT}/src/requirements.txt
+RUN pip install -r ${APP_ROOT}/src/requirements.txt
 
 RUN jupyter ${JUPYTER_CMD} --generate-config && \
     npm cache clean --force && \
