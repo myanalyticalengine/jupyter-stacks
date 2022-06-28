@@ -8,7 +8,7 @@ fi
 
 # set default to $DATA_ROOT
 if [[ "${NOTEBOOK_ARGS} $*" != *"--notebook-dir="* ]]; then
-    NOTEBOOK_ARGS="--notebook-dir=${DATA_ROOT} ${NOTEBOOK_ARGS}"
+    NOTEBOOK_ARGS="--notebook-dir=${NOTEBOOK_ROOT} ${NOTEBOOK_ARGS}"
 fi
 
 echo " --> jupyter ${JUPYTER_CMD} ${NOTEBOOK_ARGS}"
