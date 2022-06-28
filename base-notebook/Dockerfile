@@ -6,7 +6,7 @@ ENV APP_SCRIPT=/opt/app-root/bin/start.sh \
     JUPYTER_CMD=notebook \
     JUPYTER_PORT=8080 \
     JUPYTER_DATA_DIR=/opt/app-root/data \
-    JUPYTER_CONFIG_DIR=/opt/app-root/data/.jupyter \
+    JUPYTER_CONFIG_DIR=/opt/app-root/data/.jupyter
 
 USER root
 
