@@ -3,7 +3,10 @@ FROM registry.access.redhat.com/ubi8/python-39:1-51
 ENV APP_SCRIPT=/opt/app-root/bin/start.sh \
     DATA_ROOT=/opt/app-root/data \
     JUPYTER_LAB_VERSION=3.4.0 \
-    JUPYTER_CMD=notebook
+    JUPYTER_CMD=notebook \
+    JUPYTER_PORT=8080 \
+    JUPYTER_DATA_DIR=/opt/app-root/data \
+    JUPYTER_CONFIG_DIR=/opt/app-root/data/.jupyter \
 
 USER root
 
@@ -25,7 +28,6 @@ RUN chown -R 1001:0 ${APP_ROOT} && \
 COPY start.sh /opt/app-root/bin/start.sh
 RUN chmod +x /opt/app-root/bin/start.sh && \
     chown default:root /opt/app-root/bin/start.sh
-ENV APP_SCRIPT=/opt/app-root/bin/start.sh
 
 USER 1001
 
