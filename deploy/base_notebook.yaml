@@ -1,0 +1,117 @@
+apiVersion: v1
+kind: List
+items:
+  - kind: DeploymentConfig
+    apiVersion: apps.openshift.io/v1
+    metadata:
+      name: base-notebook
+      labels:
+        svc: base-notebook
+        app: jupyter-notebooks
+        app.openshift.io/runtime: python
+    spec:
+      selector:
+        svc: base-notebook
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            svc: base-notebook
+            app: jupyter-notebooks
+        spec:
+          volumes:
+            - name: notebook-data
+              persistentVolumeClaim:
+                claimName: notebook-data-pvc
+            - name: notebook-src
+              persistentVolumeClaim:
+                claimName: notebook-src-pvc
+          containers:
+            - name: base-notebook
+              image: >-
+                image-registry.openshift-image-registry.svc:5000/openshift/base-notebook:1.0.0
+              imagePullPolicy: Always
+              #envFrom:
+              #  - configMapRef:
+              #      name: notebooks-config
+              #env:
+              #  - name: foo
+              #    value: "bar"
+
+              #resources:
+              #  limits:
+              #    cpu: "2"
+              #    memory: 8Gi
+              #  requests:
+              #    cpu: "1"
+              #    memory: 4Gi
+              
+              volumeMounts:
+                - name: notebook-src
+                  mountPath: "/opt/app-root/src"
+                - name: notebook-data
+                  mountPath: "/opt/app-root/data"
+
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      name: base-notebook
+      labels:
+        app: jupyter-notebooks
+    spec:
+      to:
+        kind: Service
+        name: http-base-notebook
+        weight: 100
+      port:
+        targetPort: http
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+      wildcardPolicy: None
+      
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: http-base-notebook
+      labels:
+        app: jupyter-notebooks
+    spec:
+      ports:
+        - protocol: TCP
+          port: 8080
+          targetPort: 8080
+          name: http
+      selector:
+        svc: base-notebook
+      type: ClusterIP
+
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: notebook-data-pvc
+      labels:
+        app: jupyter-notebooks
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: gp2
+      volumeMode: Filesystem
+
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: notebook-src-pvc
+      labels:
+        app: jupyter-notebooks
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: gp2
+      volumeMode: Filesystem
